@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { TaskDto } from './tasks.dto';
 
+let lastId = 0;
+
 @Injectable()
 export class TasksService {
   private tasks: TaskDto[] = [
@@ -14,7 +16,23 @@ export class TasksService {
     { id: 8, description: 'Task 08', completed: true },
   ];
 
+  constructor() {
+    lastId = this.tasks.length;
+  }
+
   getAll() {
     return this.tasks;
+  }
+
+  getById(id: number) {
+    return this.tasks.find((task) => task.id === id);
+  }
+
+  create(task: TaskDto) {
+    const newTask = { ...task, id: ++lastId };
+
+    this.tasks.push(newTask);
+
+    return newTask;
   }
 }
