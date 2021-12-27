@@ -35,4 +35,19 @@ export class TasksService {
 
     return newTask;
   }
+
+  update(taskId: number, { id, ...updateData }: TaskDto) {
+    const taskIndex = this.tasks.findIndex((task) => task.id === taskId);
+    const taskUpdated = { ...this.tasks[taskIndex], ...updateData };
+
+    this.tasks = this.tasks.map((task) =>
+      task.id === taskId ? taskUpdated : task,
+    );
+
+    return taskUpdated;
+  }
+
+  delete(id: number) {
+    this.tasks = this.tasks.filter((task) => task.id !== id);
+  }
 }
