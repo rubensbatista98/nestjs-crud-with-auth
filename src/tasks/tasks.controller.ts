@@ -7,7 +7,11 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
+
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+
 import { TaskDto } from './tasks.dto';
 import { TasksService } from './tasks.service';
 
@@ -26,16 +30,19 @@ export class TasksController {
     return this.tasksService.getById(Number(id));
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() task: TaskDto): TaskDto {
     return this.tasksService.create(task);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   update(@Body() task: TaskDto, @Param('id') id: string) {
     return this.tasksService.update(Number(id), task);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   @HttpCode(204)
   delete(@Param('id') id: string) {
